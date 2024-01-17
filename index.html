@@ -5,9 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Eyes Mask</title>
+  <title>Eyes Masker</title>
   <script defer src="face-api.min.js"></script>
+  <script defer src="vector.js"></script>
+  <script defer src="operations.js"></script>
   <script defer src="script.js"></script>
+  <script defer src="gui.js"></script>
+  <script defer src="loaders.js"></script>
   <style>
     * {
       margin: 0;
@@ -19,29 +23,43 @@
       font-family: 'Courier New', Courier, monospace;
     }
 
-    #canvas {
-      position: relative;
-    }
+
 
     video,
     img {
       position: absolute;
-      border: 1px solid blue;
+      /* border: 1px solid blue; */
       top: 0;
       left: 0;
     }
 
-    #canvas canvas {
+    video {
+      /* display: none; */
+      /* opacity: 0.5; */
+      visibility: hidden;
+    }
+
+    #video-section #video-container {
+      position: relative;
+    }
+
+    #video-section #video-container canvas {
       /* position: absolute; */
       position: absolute;
-      border: 1px solid red;
       top: 0;
       left: 0;
     }
 
     canvas {
-      border: 2px solid black;
+      /* border: 2px solid black; */
+      background-color: greenyellow;
+
     }
+
+    #image-section canvas {
+      background-color: greenyellow;
+    }
+
 
     header {
       width: 100%;
@@ -157,7 +175,7 @@
   <section id="loader">
     <div class="content">
       <div> Please wait.</div>
-      <div> Loading AI Net models...</div>
+      <div id="loader-message"> (1/2) Loading Neural Network models...</div>
     </div>
   </section>
 
@@ -165,10 +183,10 @@
   <section id="gui" class="hidden">
     <nav>
       <div class="nav-element">
-        <div class="nav-title">Input </div>
+        <div class="nav-title">Input Source</div>
         <div class="nav-content">
           <label>
-            <select>
+            <select id="input-source-type-select">
               <option>Image</option>
               <option>Camera</option>
             </select>
@@ -238,12 +256,12 @@
 
           <label>
             <input type="checkbox" />
-            <p>Radius</p>
+            <p>Show Face Landmarks</p>
           </label>
 
           <label>
             <input type="checkbox" />
-            <p>Show Face Labels</p>
+            <p>Show Face Label</p>
           </label>
         </div>
       </div>
@@ -251,14 +269,20 @@
 
 
     <section id="image-section"></section>
-    <section id="video-section">
-      <div id="canvas">
+
+    <section id="video-section" class="hidden">
+      <div id="video-container">
         <video id="video" width="720" height="560" autoplay muted></video>
       </div>
+
     </section>
   </section>
 
-
+  <script>
+    document.addEventListener("DOMContentLoaded", (event) => {
+      console.log("DOM fully loaded and parsed");
+    });
+  </script>
 
 </body>
 
