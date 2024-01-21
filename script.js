@@ -186,12 +186,40 @@ function renderEyeBarRegion(leftEye, rightEye, canvas, ctx) {
 
   let imageData = tempCtx.getImageData(0, 0, barWidth + paddingX / 2, barHeight);
 
+  let color = document.getElementById("color").value;
+
   //COLOR MASK
-  // \for (let i = 0; i < imageData.data.length; i += 4) {
-  //   imageData.data[i] = imageData.data[i];
-  //   imageData.data[i + 1] = imageData.data[i + 1];
-  //   imageData.data[i + 2] = 0;
-  // }
+  if(color == "None"){
+    for (let i = 0; i < imageData.data.length; i += 4) {
+      imageData.data[i] = imageData.data[i];
+      imageData.data[i + 1] = imageData.data[i + 1];
+      imageData.data[i + 2] = imageData.data[i + 2];
+    }
+  }
+
+  else if(color == "Red"){
+    for (let i = 0; i < imageData.data.length; i += 4) {
+      imageData.data[i] = imageData.data[i];
+      imageData.data[i + 1] = 0;
+      imageData.data[i + 2] = 0;
+    }
+  }
+
+  else if(color == "Green"){
+    for (let i = 0; i < imageData.data.length; i += 4) {
+      imageData.data[i] = 0;
+      imageData.data[i + 1] = imageData.data[i + 1];
+      imageData.data[i + 2] = 0;
+    }
+  }
+
+  else if(color == "Blue"){
+    for (let i = 0; i < imageData.data.length; i += 4) {
+      imageData.data[i] = 0;
+      imageData.data[i + 1] = 0;
+      imageData.data[i + 2] = imageData.data[i + 2];
+    }
+  }
 
   tempCtx.clearRect(0, 0, width, height);
 
