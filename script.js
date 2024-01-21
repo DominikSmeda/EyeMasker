@@ -111,8 +111,7 @@ async function renderDetections() {
     const rightEye = landmarks.getRightEye()
     // const leftEyeBbrow = landmarks.getLeftEyeBrow()
     // const rightEyeBrow = landmarks.getRightEyeBrow()
-
-    renderEyeBarRegion(leftEye, rightEye, canvas, ctx);
+    renderEyeBarRegion(leftEye, rightEye, canvas, ctx)
   }
 
   if (detectionDebugOptions.showFaceLabel) {
@@ -187,7 +186,7 @@ function renderEyeBarRegion(leftEye, rightEye, canvas, ctx) {
   let imageData = tempCtx.getImageData(0, 0, barWidth + paddingX / 2, barHeight);
 
   //COLOR MASK
-  // for (let i = 0; i < imageData.data.length; i += 4) {
+  // \for (let i = 0; i < imageData.data.length; i += 4) {
   //   imageData.data[i] = imageData.data[i];
   //   imageData.data[i + 1] = imageData.data[i + 1];
   //   imageData.data[i + 2] = 0;
@@ -196,17 +195,45 @@ function renderEyeBarRegion(leftEye, rightEye, canvas, ctx) {
   tempCtx.clearRect(0, 0, width, height);
 
   let updateData;
+  let mask;
 
-  // IF maskOptions.effect 
+  mask = document.getElementById("mask").value;
 
-  // BLUR MASK
-  updateData = blurImageData(imageData, maskOptions.radius);
+  if(mask == "Blur"){
+    updateData = blurImageData(imageData, maskOptions.radius);
+  }
+  
+  else if(mask == "Pixel"){
+    ctx.translate(-paddingX, -paddingY)
+    ctx.translate(l.x, l.y)
+    ctx.rotate(a);
+    for (let y = 0; y < imageData.height; y += 7){
+      for (let x = 0; x < imageData.width; x += 7){
+        const index = (y * imageData.width + x) * 4;
 
-  // PIXELIZED MASK 
-  // updateData = pixelizeImageData(imageData, maskOptions.radius); // #TO IMPLEMENT (operations.js)
+        ctx.fillStyle = `rgba(
+          ${imageData.data[index]},
+          ${imageData.data[index + 1]},
+          ${imageData.data[index + 2]},
+          ${imageData.data[index + 3]},
+        )`;
 
-  // END IF
+        ctx.fillRect(x,y,7,7);
+      }
+    }
+  }
+  
+  else if(mask == "Contrast"){
+    updateData = contrastImageData(imageData);
+  }
 
+  else if(mask == "Invert"){
+    updateData = invertImageData(imageData);
+  }
+
+  else if(mask = "Grayscale"){
+    updateData = grayscaleImageData(imageData);
+  }
 
   tempCtx.putImageData(updateData, 0, 0);
   // document.body.appendChild(tempCanvas) // TO SEE SELECTED AREA
@@ -218,6 +245,3 @@ function renderEyeBarRegion(leftEye, rightEye, canvas, ctx) {
   ctx.drawImage(tempCanvas, 0, 0)
   ctx.restore();
 }
-
-
-
