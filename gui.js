@@ -4,11 +4,13 @@ const videoSection = document.getElementById('video-section');
 const effect = document.getElementById("effect");
 const factor = document.getElementById("factor");
 const color = document.getElementById("color");
+const detectionsMode = document.getElementById('detections-mode');
+const detectionsLabels = document.getElementById('detections-labels');
 
 
 const applyMaskOptions = {
     mode: 'All faces',
-    labels: ''
+    labels: ['']
 }
 
 const maskOptions = {
@@ -18,7 +20,7 @@ const maskOptions = {
 }
 
 const detectionDebugOptions = {
-    showFaceBox: true,
+    showFaceBox: false,
     showFaceLandmarks: false,
     showFaceLabel: false,
     // showFaceExpression: true,
@@ -54,6 +56,16 @@ function initializeGUI() { // #TO IMPLEMENT
 
     effect.addEventListener('change', () => {
         maskOptions.effect = effect.value;
+        renderDetections();
+    })
+
+    detectionsMode.addEventListener('change', (e) => {
+        applyMaskOptions.mode = e.target.value;
+        renderDetections();
+    })
+
+    detectionsLabels.addEventListener('input', (e) => {
+        applyMaskOptions.labels = e.target.value.split(',').map(el => el.trim());
         renderDetections();
     })
 
@@ -94,3 +106,23 @@ async function setSourceType(type) {
         startCamera();
     }
 }
+
+document.getElementById('debug-features').addEventListener('change', function (e) {
+    const targetName = e.target.name;
+    switch (targetName) {
+        case 'showFaceBox':
+            detectionDebugOptions.showFaceBox = e.target.checked;
+            break;
+
+        case 'showFaceLandmarks':
+            detectionDebugOptions.showFaceLandmarks = e.target.checked;
+            break;
+
+        case 'showFaceLabel':
+            detectionDebugOptions.showFaceLabel = e.target.checked;
+            break;
+    }
+    renderDetections();
+});
+
+

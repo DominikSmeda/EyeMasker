@@ -204,7 +204,7 @@
         <div class="nav-content">
           <label>
             <p>Mode: </p>
-            <select>
+            <select id="detections-mode">
               <option>All faces</option>
               <option>Faces with labels</option>
             </select>
@@ -212,7 +212,7 @@
 
           <label>
             <p>Labels: </p>
-            <input type="text" placeholder="label1, label2, ..." />
+            <input id="detections-labels" type="text" placeholder="label1, label2, ..." />
           </label>
 
         </div>
@@ -253,17 +253,17 @@
         <div class="nav-title">Detection Debug</div>
         <div class="nav-content">
           <label>
-            <input type="checkbox" />
+            <input type="checkbox" name="showFaceBox" id="debug-features" />
             <p>Show Face Box</p>
           </label>
 
           <label>
-            <input type="checkbox" />
+            <input type="checkbox" name="showFaceLandmarks" id="debug-features" />
             <p>Show Face Landmarks</p>
           </label>
 
           <label>
-            <input type="checkbox" />
+            <input type="checkbox" name="showFaceLabel" id="debug-features" />
             <p>Show Face Label</p>
           </label>
         </div>

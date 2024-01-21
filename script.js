@@ -60,13 +60,13 @@ async function newCameraDetection() {
   faceapi.matchDimensions(canvas, displaySize)
   image = video;
 
-  // requestAnimationFrame(cameraDetect);
-  setInterval(cameraDetect, 100)
+  requestAnimationFrame(cameraDetect);
+  // setInterval(cameraDetect, 100)
 }
 
 async function cameraDetect() {
   if (!stream) return;
-  // requestAnimationFrame(cameraDetect);
+  requestAnimationFrame(cameraDetect);
   // console.log('- Camera detect -')
 
   detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors();
@@ -103,6 +103,9 @@ async function renderDetections() {
   ctx.drawImage(image, 0, 0, displaySize.width, displaySize.height);
 
   for (let i = 0; i < results.length; i++) {
+    if (applyMaskOptions.mode == 'Faces with labels' && !applyMaskOptions.labels.includes(results[i].label)) {
+      continue;
+    }
     let landmarks = resizedDetections[i].landmarks;
     // const jawOutline = landmarks.getJawOutline()
     // const nose = landmarks.getNose()
@@ -136,7 +139,8 @@ async function renderDetections() {
 
 
 }
-
+const tempCanvas = document.createElement('canvas');
+const tempCtx = tempCanvas.getContext('2d');
 
 function renderEyeBarRegion(leftEye, rightEye, canvas, ctx) {
 
@@ -172,11 +176,11 @@ function renderEyeBarRegion(leftEye, rightEye, canvas, ctx) {
   let barWidth = eyeWidth + 2 * paddingX;
   let barHeight = 2 * paddingY;
 
-  const tempCanvas = document.createElement('canvas');
+
   tempCanvas.width = width;
   tempCanvas.height = height;
 
-  const tempCtx = tempCanvas.getContext('2d');
+
 
   tempCtx.rotate(-a);
   tempCtx.translate(-l.x, -l.y);
