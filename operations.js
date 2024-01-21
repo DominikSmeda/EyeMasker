@@ -13,23 +13,6 @@ function blurImageData(imageData, radius) {
     return imageData;
 }
 
-function pixelizeImageData(imageData, ctx){
-    for (let y = 0; y < imageData.height; y += 7){
-      for (let x = 0; x < imageData.width; x += 7){
-        const index = (y * imageData.width + x) * 4;
-
-        ctx.fillStyle = `rgba(
-          ${imageData.data[index]},
-          ${imageData.data[index + 1]},
-          ${imageData.data[index + 2]},
-          ${imageData.data[index + 3]},
-        )`;
-
-        ctx.fillRect(x,y,7,7);
-      }
-    }
-}
-
 // (used by blurImageData())
 function getWeightedAverage(imageData, x, y, radius, width, height) {
     let sumR = 0;

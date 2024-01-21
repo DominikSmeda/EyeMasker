@@ -215,7 +215,7 @@ function renderEyeBarRegion(leftEye, rightEye, canvas, ctx) {
           ${imageData.data[index]},
           ${imageData.data[index + 1]},
           ${imageData.data[index + 2]},
-          ${imageData.data[index + 3]},
+          ${imageData.data[index + 3]}
         )`;
 
         ctx.fillRect(x,y,7,7);
