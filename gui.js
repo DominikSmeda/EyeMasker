@@ -2,6 +2,7 @@ const inputSourceTypeSelect = document.getElementById('input-source-type-select'
 const imageSection = document.getElementById('image-section');
 const videoSection = document.getElementById('video-section');
 const mask = document.getElementById("mask");
+const rad = document.getElementById("radius");
 
 
 const applyMaskOptions = {
@@ -38,8 +39,8 @@ async function onModelsLoaded() {
 // initialize gui with defaults from config options (above)
 function initializeGUI() { // #TO IMPLEMENT
 
-
-    mask.addEventListener('change', newImageDetection)
+    rad.addEventListener('change', renderDetections)
+    mask.addEventListener('change', renderDetections)
     imageInput.addEventListener('change', newImageDetection)
 
     setSourceType(inputSourceTypeSelect.value)

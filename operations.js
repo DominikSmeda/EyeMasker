@@ -5,7 +5,7 @@ function blurImageData(imageData, radius) {
 
     for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-            const { r, g, b } = getWeightedAverage(imageData, x, y, radius, width, height);
+            const { r, g, b } = getWeightedAverage(imageData, x, y, radius * 10, width, height);
             setPixel(imageData, x, y, r, g, b);
         }
     }
@@ -51,8 +51,8 @@ function setPixel(imageData, x, y, r, g, b) {
     imageData.data[index + 2] = b;
 }
 
-function contrastImageData(imageData){
-    contrast = 2;
+function contrastImageData(imageData, radius){
+    contrast = radius / 5;
     var intercept = 128 * (1 - contrast);
     const width = imageData.width;
     const height = imageData.height;
@@ -73,44 +73,46 @@ function setPixelContrast(imageData, x, y, contrast, intercept){
     imageData.data[index + 2] = imageData.data[index + 2] * contrast + intercept;
 }
 
-function invertImageData(imageData){
+function invertImageData(imageData, radius){
     const width = imageData.width;
     const height = imageData.height;
 
     for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-            setPixelInvert(imageData, x, y);
+            setPixelInvert(imageData, x, y, radius);
         }
     }
 
     return imageData;
 }
 
-function setPixelInvert(imageData, x, y){
+function setPixelInvert(imageData, x, y, radius){
     const index = (y * imageData.width + x) * 4;
-    imageData.data[index] = 255 - imageData.data[index];
-    imageData.data[index + 1] = 255 - imageData.data[index + 1];
-    imageData.data[index + 2] = 255 - imageData.data[index + 2];
+    const value = radius * 25.5;
+    imageData.data[index] = value - imageData.data[index];
+    imageData.data[index + 1] = value - imageData.data[index + 1];
+    imageData.data[index + 2] = value - imageData.data[index + 2];
 }
 
-function grayscaleImageData(imageData){
+function grayscaleImageData(imageData, radius){
     const width = imageData.width;
     const height = imageData.height;
 
     for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-            setPixelGrayscale(imageData, x, y);
+            setPixelGrayscale(imageData, x, y, radius);
         }
     }
 
     return imageData;
 }
 
-function setPixelGrayscale(imageData, x, y){
+function setPixelGrayscale(imageData, x, y, radius){
     const index = (y * imageData.width + x) * 4;
     const avg = (imageData.data[index] + imageData.data[index + 1] + imageData.data[index + 2]) / 3;
-    imageData.data[index] = avg;
-    imageData.data[index + 1] = avg;
-    imageData.data[index + 2] = avg;
+    radius = radius / 10;
+    imageData.data[index] = radius * avg;
+    imageData.data[index + 1] = radius * avg;
+    imageData.data[index + 2] = radius * avg;
 }
 
