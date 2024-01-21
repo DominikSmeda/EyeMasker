@@ -13,6 +13,23 @@ function blurImageData(imageData, radius) {
     return imageData;
 }
 
+function pixelizeImageData(imageData, ctx){
+    for (let y = 0; y < imageData.height; y += 7){
+      for (let x = 0; x < imageData.width; x += 7){
+        const index = (y * imageData.width + x) * 4;
+
+        ctx.fillStyle = `rgba(
+          ${imageData.data[index]},
+          ${imageData.data[index + 1]},
+          ${imageData.data[index + 2]},
+          ${imageData.data[index + 3]},
+        )`;
+
+        ctx.fillRect(x,y,7,7);
+      }
+    }
+}
+
 // (used by blurImageData())
 function getWeightedAverage(imageData, x, y, radius, width, height) {
     let sumR = 0;
@@ -50,3 +67,67 @@ function setPixel(imageData, x, y, r, g, b) {
     imageData.data[index + 1] = g;
     imageData.data[index + 2] = b;
 }
+
+function contrastImageData(imageData){
+    contrast = 2;
+    var intercept = 128 * (1 - contrast);
+    const width = imageData.width;
+    const height = imageData.height;
+
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            setPixelContrast(imageData, x, y, contrast, intercept);
+        }
+    }
+
+    return imageData;
+}
+
+function setPixelContrast(imageData, x, y, contrast, intercept){
+    const index = (y * imageData.width + x) * 4;
+    imageData.data[index] = imageData.data[index] * contrast + intercept;
+    imageData.data[index + 1] = imageData.data[index + 1] * contrast + intercept;
+    imageData.data[index + 2] = imageData.data[index + 2] * contrast + intercept;
+}
+
+function invertImageData(imageData){
+    const width = imageData.width;
+    const height = imageData.height;
+
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            setPixelInvert(imageData, x, y);
+        }
+    }
+
+    return imageData;
+}
+
+function setPixelInvert(imageData, x, y){
+    const index = (y * imageData.width + x) * 4;
+    imageData.data[index] = 255 - imageData.data[index];
+    imageData.data[index + 1] = 255 - imageData.data[index + 1];
+    imageData.data[index + 2] = 255 - imageData.data[index + 2];
+}
+
+function grayscaleImageData(imageData){
+    const width = imageData.width;
+    const height = imageData.height;
+
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            setPixelGrayscale(imageData, x, y);
+        }
+    }
+
+    return imageData;
+}
+
+function setPixelGrayscale(imageData, x, y){
+    const index = (y * imageData.width + x) * 4;
+    const avg = (imageData.data[index] + imageData.data[index + 1] + imageData.data[index + 2]) / 3;
+    imageData.data[index] = avg;
+    imageData.data[index + 1] = avg;
+    imageData.data[index + 2] = avg;
+}
+

@@ -1,7 +1,7 @@
 const inputSourceTypeSelect = document.getElementById('input-source-type-select');
 const imageSection = document.getElementById('image-section');
 const videoSection = document.getElementById('video-section');
-
+const mask = document.getElementById("mask");
 
 
 const applyMaskOptions = {
@@ -39,7 +39,7 @@ async function onModelsLoaded() {
 function initializeGUI() { // #TO IMPLEMENT
 
 
-
+    mask.addEventListener('change', newImageDetection)
     imageInput.addEventListener('change', newImageDetection)
 
     setSourceType(inputSourceTypeSelect.value)
