@@ -41,8 +41,8 @@ async function onModelsLoaded() {
 }
 
 
-// initialize gui with defaults from config options (above)
-function initializeGUI() { // #TO IMPLEMENT
+
+function initializeGUI() {
 
     color.addEventListener('change', () => {
         maskOptions.color = color.value;

@@ -10,3 +10,4 @@ function det(vec1, vec2) {
 function angleBetween360(vec1, vec2) {
     return Math.atan2(det(vec1, vec2), dot(vec1, vec2))
 }
+
