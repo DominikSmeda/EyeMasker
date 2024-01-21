@@ -234,26 +234,24 @@ function renderEyeBarRegion(leftEye, rightEye, canvas, ctx) {
   }
   
   else if(mask == "Pixel"){
-    ctx.save();
-    ctx.translate(-paddingX, -paddingY)
-    ctx.translate(l.x, l.y)
-    ctx.rotate(a);
+    tempCtx.translate(-paddingX, -paddingY)
+    tempCtx.translate(l.x, l.y)
+    tempCtx.rotate(a);
     radius = Math.floor(radius);
     for (let y = 0; y < imageData.height; y += radius){
       for (let x = 0; x < imageData.width; x += radius){
         const index = (y * imageData.width + x) * 4;
 
-        ctx.fillStyle = `rgba(
+        tempCtx.fillStyle = `rgba(
           ${imageData.data[index]},
           ${imageData.data[index + 1]},
           ${imageData.data[index + 2]},
           ${imageData.data[index + 3]}
         )`;
 
-        ctx.fillRect(x,y,radius,radius);
+        tempCtx.fillRect(x,y,radius,radius);
       }
     }
-    ctx.restore();
   }
   
   else if(mask == "Contrast"){
@@ -268,8 +266,9 @@ function renderEyeBarRegion(leftEye, rightEye, canvas, ctx) {
     updateData = grayscaleImageData(imageData, radius);
   }
 
-  tempCtx.putImageData(updateData, 0, 0);
-  // document.body.appendChild(tempCanvas) // TO SEE SELECTED AREA
+  if(mask != "Pixel"){
+    tempCtx.putImageData(updateData, 0, 0);
+  }
 
   ctx.save()
   ctx.translate(-paddingX, -paddingY)
