@@ -1,8 +1,8 @@
 const inputSourceTypeSelect = document.getElementById('input-source-type-select');
 const imageSection = document.getElementById('image-section');
 const videoSection = document.getElementById('video-section');
-const mask = document.getElementById("mask");
-const rad = document.getElementById("radius");
+const effect = document.getElementById("effect");
+const factor = document.getElementById("factor");
 const color = document.getElementById("color");
 
 
@@ -12,7 +12,9 @@ const applyMaskOptions = {
 }
 
 const maskOptions = {
-    radius: 50
+    effect: 'Blur',
+    factor: 5,
+    color: 'None'
 }
 
 const detectionDebugOptions = {
@@ -39,9 +41,22 @@ async function onModelsLoaded() {
 
 // initialize gui with defaults from config options (above)
 function initializeGUI() { // #TO IMPLEMENT
-    color.addEventListener('change', renderDetections)
-    rad.addEventListener('change', renderDetections)
-    mask.addEventListener('change', renderDetections)
+
+    color.addEventListener('change', () => {
+        maskOptions.color = color.value;
+        renderDetections();
+    })
+
+    factor.addEventListener('input', () => {
+        maskOptions.factor = factor.value;
+        renderDetections();
+    })
+
+    effect.addEventListener('change', () => {
+        maskOptions.effect = effect.value;
+        renderDetections();
+    })
+
     imageInput.addEventListener('change', newImageDetection)
 
     setSourceType(inputSourceTypeSelect.value)

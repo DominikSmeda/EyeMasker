@@ -186,10 +186,10 @@ function renderEyeBarRegion(leftEye, rightEye, canvas, ctx) {
 
   let imageData = tempCtx.getImageData(0, 0, barWidth + paddingX / 2, barHeight);
 
-  let color = document.getElementById("color").value;
+  let color = maskOptions.color
 
   //COLOR MASK
-  if(color == "None"){
+  if (color == "None") {
     for (let i = 0; i < imageData.data.length; i += 4) {
       imageData.data[i] = imageData.data[i];
       imageData.data[i + 1] = imageData.data[i + 1];
@@ -197,7 +197,7 @@ function renderEyeBarRegion(leftEye, rightEye, canvas, ctx) {
     }
   }
 
-  else if(color == "Red"){
+  else if (color == "Red") {
     for (let i = 0; i < imageData.data.length; i += 4) {
       imageData.data[i] = imageData.data[i];
       imageData.data[i + 1] = 0;
@@ -205,7 +205,7 @@ function renderEyeBarRegion(leftEye, rightEye, canvas, ctx) {
     }
   }
 
-  else if(color == "Green"){
+  else if (color == "Green") {
     for (let i = 0; i < imageData.data.length; i += 4) {
       imageData.data[i] = 0;
       imageData.data[i + 1] = imageData.data[i + 1];
@@ -213,7 +213,7 @@ function renderEyeBarRegion(leftEye, rightEye, canvas, ctx) {
     }
   }
 
-  else if(color == "Blue"){
+  else if (color == "Blue") {
     for (let i = 0; i < imageData.data.length; i += 4) {
       imageData.data[i] = 0;
       imageData.data[i + 1] = 0;
@@ -224,22 +224,20 @@ function renderEyeBarRegion(leftEye, rightEye, canvas, ctx) {
   tempCtx.clearRect(0, 0, width, height);
 
   let updateData;
-  let mask;
 
-  mask = document.getElementById("mask").value;
-  radius = document.getElementById("radius").value;
-
-  if(mask == "Blur"){
-    updateData = blurImageData(imageData, radius);
+  if (maskOptions.effect == "Blur") {
+    updateData = blurImageData(imageData, maskOptions.factor);
   }
-  
-  else if(mask == "Pixel"){
+
+  else if (maskOptions.effect == "Pixel") {
     tempCtx.translate(-paddingX, -paddingY)
     tempCtx.translate(l.x, l.y)
     tempCtx.rotate(a);
-    radius = Math.floor(radius);
-    for (let y = 0; y < imageData.height; y += radius){
-      for (let x = 0; x < imageData.width; x += radius){
+
+    let size = Math.floor(maskOptions.factor);
+
+    for (let y = 0; y < imageData.height; y += size) {
+      for (let x = 0; x < imageData.width; x += size) {
         const index = (y * imageData.width + x) * 4;
 
         tempCtx.fillStyle = `rgba(
@@ -249,24 +247,24 @@ function renderEyeBarRegion(leftEye, rightEye, canvas, ctx) {
           ${imageData.data[index + 3]}
         )`;
 
-        tempCtx.fillRect(x,y,radius,radius);
+        tempCtx.fillRect(x, y, size, size);
       }
     }
   }
-  
-  else if(mask == "Contrast"){
-    updateData = contrastImageData(imageData, radius);
+
+  else if (maskOptions.effect == "Contrast") {
+    updateData = contrastImageData(imageData, maskOptions.factor);
   }
 
-  else if(mask == "Invert"){
-    updateData = invertImageData(imageData, radius);
+  else if (maskOptions.effect == "Invert") {
+    updateData = invertImageData(imageData, maskOptions.factor);
   }
 
-  else if(mask = "Grayscale"){
-    updateData = grayscaleImageData(imageData, radius);
+  else if (maskOptions.effect = "Grayscale") {
+    updateData = grayscaleImageData(imageData, maskOptions.factor);
   }
 
-  if(mask != "Pixel"){
+  if (maskOptions.effect != "Pixel") {
     tempCtx.putImageData(updateData, 0, 0);
   }
 
